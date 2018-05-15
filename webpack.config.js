@@ -18,7 +18,7 @@ const plugins = [
   }),
   new HtmlWebpackPlugin({
     template: path.join(__dirname, "public/index.html"),
-    inject: false,
+    inject: "body",
     favicon: path.join(__dirname, "public/favicon.ico"),
     minify: {
       removeComments: true,

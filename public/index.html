@@ -1,5 +1,3 @@
-<?php header('Content-Type: text/html; charset=utf-8');  ?>
-
 <html>
     <head>
         <title>元カレ計算機(グラブル攻撃力計算機)</title>
@@ -15,7 +13,7 @@
         <meta name="viewport" content="width=device-width,maximum-scale=1" />
         <link rel="stylesheet" type="text/css" href="css/smartphone.css" media="screen and (min-device-width: 320px) and (max-device-width: 768px)">
         <link rel="stylesheet" type="text/css" href="css/style.css" media="screen and (min-device-width: 769px)">
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="./gana.js"></script>
     </head>
     <body>
@@ -46,8 +44,5 @@
                 </strong>
             </div>
         </div>
-	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
-	<script src="dist/<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
-	<% } %>
     </body>
 </html>
