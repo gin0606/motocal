@@ -28,15 +28,16 @@ var {
   Grid
 } = require("react-bootstrap");
 var Profile = require("./profile.js");
-var { SummonList, Summon } = require("./summon.js");
-var { CharaList, Chara } = require("./chara.js");
-var { ArmList, Arm } = require("./armlist.js");
-var { AdsenseAdvertisement } = require("./advertisement.js");
+var { SummonList } = require("./SummonList.js");
+var { CharaList } = require("./CharaList.js");
+var { ArmList } = require("./ArmList.js");
+var { AdsenseAdvertisement } = require("./AdsenseAdvertisement.js");
 var GlobalConst = require("./global_const.js");
 var Notice = require("./notice.js");
-var { ResultList, Result } = require("./result.js");
-var { HowTo, NiteHowTo, HPChartHowTo, SimulatorHowTo } = require("./howto.js");
-var { ColP } = require("./gridp.js");
+var { ResultList } = require("./ResultList.js");
+var { HowTo } = require("./HowTo.js");
+var { NiteHowTo } = require("./NiteHowTo.js");
+var { SimulatorHowTo } = require("./SimulatorHowTo.js");
 var intl = require("./translate.js");
 var _ua = GlobalConst._ua;
 

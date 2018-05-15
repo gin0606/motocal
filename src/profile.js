@@ -2,7 +2,7 @@ var React = require("react");
 var { Button, FormControl, InputGroup, FormGroup } = require("react-bootstrap");
 var intl = require("./translate.js");
 var GlobalConst = require("./global_const.js");
-var TextWithTooltip = GlobalConst.TextWithTooltip;
+var { TextWithTooltip } = require("./TextWithTooltip.js");
 
 // const
 var zenith = GlobalConst.zenith;

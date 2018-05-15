@@ -17,9 +17,10 @@ var {
   ListGroupItem,
   Glyphicon
 } = require("react-bootstrap");
-var { SimulationChart } = require("./chart.js");
+var { SimulationChart } = require("./SimulationChart.js");
+var { BuffListForm } = require("./BuffListForm.js");
 var GlobalConst = require("./global_const.js");
-var TextWithTooltip = GlobalConst.TextWithTooltip;
+var { TextWithTooltip } = require("./TextWithTooltip.js");
 var selector = GlobalConst.selector;
 var turnList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 var turnTypeList = {
@@ -1284,33 +1285,4 @@ var Simulator = React.createClass({
   }
 });
 
-var BuffListForm = React.createClass({
-  render: function() {
-    var locale = this.props.locale;
-
-    return (
-      <FormControl
-        componentClass="select"
-        name={this.props.name}
-        id={this.props.id}
-        value={this.props.value}
-        onChange={this.props.onChange}
-      >
-        <optgroup label="通常バフ">{select_normalbuffAmount[locale]}</optgroup>
-        <optgroup label="属性バフ">{select_elementbuffAmount[locale]}</optgroup>
-        <optgroup label="その他バフ">{select_otherbuffAmount[locale]}</optgroup>
-        <optgroup label="DA率">{select_dabuffAmount[locale]}</optgroup>
-        <optgroup label="TA率">{select_tabuffAmount[locale]}</optgroup>
-        <optgroup label="奥義ゲージ上昇量">
-          {select_ougigagebuffAmount[locale]}
-        </optgroup>
-        <optgroup label="追加ダメージ">
-          {select_additionalbuffAmount[locale]}
-        </optgroup>
-      </FormControl>
-    );
-  }
-});
-
 module.exports = Simulator;
-module.exports.BuffListForm = BuffListForm;

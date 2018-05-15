@@ -1,18 +1,5 @@
 var React = require("react");
-var ReactDOM = require("react-dom");
-var {
-  Thumbnail,
-  ControlLabel,
-  Button,
-  ButtonGroup,
-  FormControl,
-  Checkbox,
-  Modal,
-  Image,
-  Popover,
-  Panel,
-  Glyphicon
-} = require("react-bootstrap");
+var { Image, Panel, Glyphicon } = require("react-bootstrap");
 var intl = require("./translate.js");
 
 var Notice = React.createClass({
