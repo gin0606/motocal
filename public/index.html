@@ -1,3 +1,5 @@
+<?php header('Content-Type: text/html; charset=utf-8');  ?>
+
 <html>
     <head>
         <title>元カレ計算機(グラブル攻撃力計算機)</title>
@@ -84,5 +86,8 @@
                 </strong>
             </div>
         </div>
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+	<script src="dist/<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+	<% } %>
     </body>
 </html>
