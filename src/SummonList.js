@@ -8,23 +8,25 @@ var GlobalConst = require("./global_const.js");
 // inject GlobalConst...
 var selector = GlobalConst.selector;
 
-var SummonList = React.createClass({
-  getInitialState: function() {
+class SummonList extends React.Component {
+  constructor(props) {
+    super(props);
     // summonsはkey管理のためだけの配列
     // summonsのindexが表示順 = Summonのprops.idになる
     var sm = [];
-    for (var i = 0; i < this.props.summonNum; i++) {
+    for (var i = 0; i < props.summonNum; i++) {
       sm.push(i);
     }
 
-    return {
+    this.state = {
       smlist: [],
       defaultElement: "fire",
       summons: sm,
       arrayForCopy: {}
     };
-  },
-  updateSummonNum: function(num) {
+  }
+
+  updateSummonNum = (num) => {
     var summons = this.state.summons;
 
     if (summons.length < num) {
@@ -39,8 +41,9 @@ var SummonList = React.createClass({
       }
     }
     this.setState({ summons: summons });
-  },
-  componentWillReceiveProps: function(nextProps) {
+  };
+
+  componentWillReceiveProps(nextProps) {
     if (nextProps.dataName != this.props.dataName) {
       this.setState({ smlist: nextProps.dataForLoad });
       this.updateSummonNum(nextProps.summonNum);
@@ -55,8 +58,9 @@ var SummonList = React.createClass({
       this.setState({ smlist: newsmlist });
     }
     this.updateSummonNum(nextProps.summonNum);
-  },
-  handleOnCopy: function(id, state) {
+  }
+
+  handleOnCopy = (id, state) => {
     if (id < this.props.summonNum - 1) {
       // arrayForCopyにコピー対象のstateを入れておいて、
       // componentWillReceivePropsで読み出されるようにする
@@ -72,8 +76,9 @@ var SummonList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newsmlist);
     }
-  },
-  handleOnRemove: function(id, initialState) {
+  };
+
+  handleOnRemove = (id, initialState) => {
     // arrayForCopyに初期stateを入れておいて、
     // componentWillReceivePropsで読み出されるようにする
     var newArrayForCopy = this.state.arrayForCopy;
@@ -87,13 +92,15 @@ var SummonList = React.createClass({
 
     // Root へ変化を伝搬
     this.props.onChange(newsmlist);
-  },
-  copyCompleted: function(id) {
+  };
+
+  copyCompleted = (id) => {
     var state = this.state;
     delete state["arrayForCopy"][id];
     this.setState(state);
-  },
-  handleMoveUp: function(id) {
+  };
+
+  handleMoveUp = (id) => {
     if (id > 0) {
       var newsummons = this.state.summons;
 
@@ -109,8 +116,9 @@ var SummonList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newsmlist);
     }
-  },
-  handleMoveDown: function(id) {
+  };
+
+  handleMoveDown = (id) => {
     if (id < this.props.summonNum - 1) {
       var newsummons = this.state.summons;
 
@@ -125,19 +133,22 @@ var SummonList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newsmlist);
     }
-  },
-  handleOnChange: function(key, state) {
+  };
+
+  handleOnChange = (key, state) => {
     var newsmlist = this.state.smlist;
     newsmlist[key] = state;
     this.setState({ smlist: newsmlist });
     this.props.onChange(newsmlist);
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var summons = this.state.summons;
     var hChange = this.handleOnChange;
@@ -189,6 +200,6 @@ var SummonList = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.SummonList = SummonList;

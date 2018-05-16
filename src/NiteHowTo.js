@@ -1,8 +1,8 @@
 var React = require("react");
 var { Thumbnail } = require("react-bootstrap");
 
-var NiteHowTo = React.createClass({
-  render: function() {
+class NiteHowTo extends React.Component {
+  render() {
     return (
       <div className="howTo">
         <p>
@@ -150,5 +150,6 @@ var NiteHowTo = React.createClass({
       </div>
     );
   }
-});
+}
+
 module.exports.NiteHowTo = NiteHowTo;

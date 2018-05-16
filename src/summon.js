@@ -7,26 +7,27 @@ var GlobalConst = require("./global_const.js");
 // inject GlobalConst...
 var selector = GlobalConst.selector;
 
-var Summon = React.createClass({
-  getInitialState: function() {
-    return {
-      selfSummonType: "magna",
-      selfSummonAmount: 100,
-      selfSummonAmount2: 0,
-      selfElement: "fire",
-      friendSummonType: "element",
-      friendSummonAmount: 80,
-      friendSummonAmount2: 0,
-      friendElement: "fire",
-      attack: 0,
-      hp: 0,
-      hpBonus: 0,
-      DA: 0,
-      TA: 0,
-      criticalRatio: 0.0
-    };
-  },
-  componentDidMount: function() {
+var initialState = {
+  selfSummonType: "magna",
+  selfSummonAmount: 100,
+  selfSummonAmount2: 0,
+  selfElement: "fire",
+  friendSummonType: "element",
+  friendSummonAmount: 80,
+  friendSummonAmount2: 0,
+  friendElement: "fire",
+  attack: 0,
+  hp: 0,
+  hpBonus: 0,
+  DA: 0,
+  TA: 0,
+  criticalRatio: 0.0
+};
+
+class Summon extends React.Component {
+  state = initialState;
+
+  componentDidMount() {
     var state = this.state;
 
     // もし dataForLoad に自分に該当するキーがあるなら読み込む
@@ -44,8 +45,9 @@ var Summon = React.createClass({
     // 初期化後 state を 上の階層に渡しておく
     // summonList では onChange が勝手に上に渡してくれるので必要なし
     this.props.onChange(this.props.id, state);
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     // データロード時のみ読み込み
     if (nextProps.dataName != this.props.dataName) {
       // 対応するIDが無い場合は undefined が飛んでくる
@@ -75,34 +77,42 @@ var Summon = React.createClass({
       this.setState(newState);
       this.props.onChange(this.props.id, newState);
     }
-  },
-  handleEvent: function(key, e) {
+  }
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  handleSelectEvent: function(key, e) {
+  };
+
+  handleSelectEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
     this.props.onChange(this.props.id, newState);
-  },
-  handleOnBlur: function(e) {
+  };
+
+  handleOnBlur = (e) => {
     this.props.onChange(this.props.id, this.state);
-  },
-  clickRemoveButton: function(e) {
-    this.props.onRemove(this.props.id, this.getInitialState());
-  },
-  clickCopyButton: function(e, state) {
+  };
+
+  clickRemoveButton = (e) => {
+    this.props.onRemove(this.props.id, initialState);
+  };
+
+  clickCopyButton = (e, state) => {
     this.props.onCopy(this.props.id, this.state);
-  },
-  clickMoveUp: function(e) {
+  };
+
+  clickMoveUp = (e) => {
     this.props.onMoveUp(this.props.id);
-  },
-  clickMoveDown: function(e) {
+  };
+
+  clickMoveDown = (e) => {
     this.props.onMoveDown(this.props.id);
-  },
-  handleSummonAmountChange(type, ind, e) {
+  };
+
+  handleSummonAmountChange = (type, ind, e) => {
     var newState = this.state;
     if (type == "self") {
       if (ind == 0) {
@@ -119,8 +129,9 @@ var Summon = React.createClass({
     }
     this.setState(newState);
     this.props.onChange(this.props.id, newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     var selfSummon = [{ label: "", input: "select" }, { input: "hidden" }];
@@ -350,6 +361,6 @@ var Summon = React.createClass({
       </ColP>
     );
   }
-});
+}
 
 module.exports.Summon = Summon;

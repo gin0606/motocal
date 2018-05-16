@@ -7,47 +7,48 @@ var GlobalConst = require("./global_const.js");
 var supportAbilities = GlobalConst.supportAbilities;
 var selector = GlobalConst.selector;
 
-var Chara = React.createClass({
-  getInitialState: function() {
-    return {
-      name: "",
-      element: "fire",
-      race: "human",
-      attack: 0,
-      hp: 0,
-      support: "none",
-      support2: "none",
-      type: "attack",
-      favArm: "dagger",
-      favArm2: "none",
-      remainHP: 100,
-      DA: 6.5,
-      TA: 3.0,
-      isConsideredInAverage: true,
-      openBufflist: false,
-      openLBlist: false,
-      normalBuff: 0,
-      elementBuff: 0,
-      otherBuff: 0,
-      otherBuff2: 0,
-      additionalDamageBuff: 0,
-      daBuff: 0,
-      taBuff: 0,
-      ougiGageBuff: 0,
-      damageLimitBuff: 0,
-      ougiDamageLimitBuff: 0,
-      LBATK: 0,
-      LBHP: 0,
-      LBDA: 0,
-      LBTA: 0,
-      LBElement: 0,
-      LBCritical1: "none",
-      LBCritical2: "none",
-      LBCritical3: "none",
-      LBCritical4: "none"
-    };
-  },
-  componentDidMount: function() {
+var initialState = {
+  name: "",
+  element: "fire",
+  race: "human",
+  attack: 0,
+  hp: 0,
+  support: "none",
+  support2: "none",
+  type: "attack",
+  favArm: "dagger",
+  favArm2: "none",
+  remainHP: 100,
+  DA: 6.5,
+  TA: 3.0,
+  isConsideredInAverage: true,
+  openBufflist: false,
+  openLBlist: false,
+  normalBuff: 0,
+  elementBuff: 0,
+  otherBuff: 0,
+  otherBuff2: 0,
+  additionalDamageBuff: 0,
+  daBuff: 0,
+  taBuff: 0,
+  ougiGageBuff: 0,
+  damageLimitBuff: 0,
+  ougiDamageLimitBuff: 0,
+  LBATK: 0,
+  LBHP: 0,
+  LBDA: 0,
+  LBTA: 0,
+  LBElement: 0,
+  LBCritical1: "none",
+  LBCritical2: "none",
+  LBCritical3: "none",
+  LBCritical4: "none"
+};
+
+class Chara extends React.Component {
+  state = initialState;
+
+  componentDidMount() {
     var state = this.state;
 
     // もし dataForLoad に自分に該当するキーがあるなら読み込む
@@ -68,8 +69,9 @@ var Chara = React.createClass({
     // 初期化後 state を 上の階層に渡しておく
     // CharaList では onChange が勝手に上に渡してくれるので必要なし
     this.props.onChange(this.props.id, state, false);
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     // only fired on Data Load
     if (nextProps.dataName != this.props.dataName) {
       var chara = nextProps.dataForLoad;
@@ -106,8 +108,9 @@ var Chara = React.createClass({
       this.setState(newState);
       this.props.onChange(this.props.id, newState, false);
     }
-  },
-  setNewCharaState: function(newState, newchara) {
+  }
+
+  setNewCharaState = (newState, newchara) => {
     newState["name"] = newchara[this.props.locale];
     newState["attack"] = parseInt(newchara.attack);
     newState["hp"] = parseInt(newchara.hp);
@@ -122,13 +125,15 @@ var Chara = React.createClass({
     newState["support2"] = newchara.support2;
 
     return newState;
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  handleSelectEvent: function(key, e) {
+  };
+
+  handleSelectEvent = (key, e) => {
     var newState = this.state;
 
     if (key == "isConsideredInAverage") {
@@ -138,37 +143,45 @@ var Chara = React.createClass({
     }
     this.setState(newState);
     this.props.onChange(this.props.id, newState, false);
-  },
-  handleOnBlur: function(key, e) {
+  };
+
+  handleOnBlur = (key, e) => {
     if (key == "name" && this.state.name != "" && e.target.value != "") {
       this.props.onChange(this.props.id, this.state, true);
     } else {
       this.props.onChange(this.props.id, this.state, false);
     }
-  },
-  openPresets: function(e) {
+  };
+
+  openPresets = (e) => {
     if (e.target.value == "" && this.state.attack == 0) {
       e.target.blur();
       this.setState({ attack: 1 });
       this.props.openPresets();
     }
-  },
-  clickRemoveButton: function(e) {
-    this.props.onRemove(this.props.id, this.getInitialState());
-  },
-  clickMoveUp: function(e) {
+  };
+
+  clickRemoveButton = (e) => {
+    this.props.onRemove(this.props.id, initialState);
+  };
+
+  clickMoveUp = (e) => {
     this.props.onMoveUp(this.props.id);
-  },
-  clickMoveDown: function(e) {
+  };
+
+  clickMoveDown = (e) => {
     this.props.onMoveDown(this.props.id);
-  },
-  switchBufflist: function(e) {
+  };
+
+  switchBufflist = (e) => {
     this.setState({ openBufflist: !this.state.openBufflist });
-  },
-  switchLBlist: function(e) {
+  };
+
+  switchLBlist = (e) => {
     this.setState({ openLBlist: !this.state.openLBlist });
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -719,6 +732,6 @@ var Chara = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.Chara = Chara;

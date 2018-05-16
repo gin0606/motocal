@@ -18,17 +18,18 @@ var _ua = GlobalConst._ua;
 var { Arm } = require("./Arm.js");
 
 // ArmList has a number of Arm objects.
-var ArmList = React.createClass({
-  getInitialState: function() {
+class ArmList extends React.Component {
+  constructor(props) {
+    super(props);
     var al = [];
-    for (var i = 0; i < this.props.armNum; i++) al[i] = [];
+    for (var i = 0; i < props.armNum; i++) al[i] = [];
 
     var arms = [];
-    for (var i = 0; i < this.props.armNum; i++) {
+    for (var i = 0; i < props.armNum; i++) {
       arms.push(i);
     }
 
-    return {
+    this.state = {
       // 武器リストをRootに渡すための連想配列
       alist: al,
       // 武器リストを管理するための連想配列
@@ -42,14 +43,17 @@ var ArmList = React.createClass({
       openPresets: false,
       arrayForCopy: {}
     };
-  },
-  closePresets: function() {
+  }
+
+  closePresets = () => {
     this.setState({ openPresets: false });
-  },
-  openPresets: function() {
+  };
+
+  openPresets = () => {
     this.setState({ openPresets: true });
-  },
-  updateArmNum: function(num) {
+  };
+
+  updateArmNum = (num) => {
     var arms = this.state.arms;
     if (arms.length < num) {
       var maxvalue = Math.max.apply(null, arms);
@@ -63,8 +67,9 @@ var ArmList = React.createClass({
       }
     }
     this.setState({ arms: arms });
-  },
-  componentWillReceiveProps: function(nextProps) {
+  };
+
+  componentWillReceiveProps(nextProps) {
     if (
       nextProps.dataName != this.props.dataName &&
       Array.isArray(nextProps.dataForLoad)
@@ -89,8 +94,9 @@ var ArmList = React.createClass({
       }
       this.updateArmNum(nextProps.armNum);
     }
-  },
-  handleOnCopy: function(id, state) {
+  }
+
+  handleOnCopy = (id, state) => {
     if (id < this.props.armNum - 1) {
       // arrayForCopyにコピー対象のstateを入れておいて、
       // componentWillReceivePropsで読み出されるようにする
@@ -105,8 +111,9 @@ var ArmList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newalist, false);
     }
-  },
-  handleOnRemove: function(id, initialState) {
+  };
+
+  handleOnRemove = (id, initialState) => {
     // arrayForCopyに初期stateを入れておいて、
     // componentWillReceivePropsで読み出されるようにする
     var newArrayForCopy = this.state.arrayForCopy;
@@ -119,8 +126,9 @@ var ArmList = React.createClass({
 
     // Root へ変化を伝搬
     this.props.onChange(newalist, false);
-  },
-  handleMoveUp: function(id) {
+  };
+
+  handleMoveUp = (id) => {
     if (id > 0) {
       var newarms = this.state.arms;
 
@@ -135,8 +143,9 @@ var ArmList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newalist, false);
     }
-  },
-  handleMoveDown: function(id) {
+  };
+
+  handleMoveDown = (id) => {
     if (id < this.props.armNum - 1) {
       var newarms = this.state.arms;
 
@@ -151,26 +160,30 @@ var ArmList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newalist, false);
     }
-  },
-  copyCompleted: function(id) {
+  };
+
+  copyCompleted = (id) => {
     var state = this.state;
     delete state["arrayForCopy"][id];
     this.setState(state);
-  },
-  handleOnChange: function(key, state, isSubtle) {
+  };
+
+  handleOnChange = (key, state, isSubtle) => {
     var newalist = this.state.alist;
     newalist[key] = state;
     this.setState({ alist: newalist });
     this.setState({ addArm: null });
     this.props.onChange(newalist, isSubtle);
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     newState["addArm"] = null;
     this.setState(newState);
-  },
-  addTemplateArm: function(templateArm, considerNum) {
+  };
+
+  addTemplateArm = (templateArm, considerNum) => {
     var minimumID = -1;
     for (var key in this.state.alist) {
       if (this.state.alist[key].name == "") {
@@ -198,8 +211,9 @@ var ArmList = React.createClass({
         alert("武器がいっぱいです。");
       }
     }
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var dataName = this.props.dataName;
     var arms = this.state.arms;
@@ -297,6 +311,6 @@ var ArmList = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.ArmList = ArmList;

@@ -11,8 +11,8 @@ var jobTypes = GlobalConst.jobTypes;
 var armTypes = GlobalConst.armTypes;
 var selector = GlobalConst.selector;
 
-var Profile = React.createClass({
-  getDefaultProps() {
+class Profile extends React.Component {
+  static defaultProps = function() {
     var zenithBonuses = { ja: {}, en: {} };
     zenithBonuses.ja = Object.keys(zenith).map(function(opt) {
       return (
@@ -49,12 +49,57 @@ var Profile = React.createClass({
       zenithBonuses: zenithBonuses,
       alljobs: alljobs
     };
-  },
-  componentDidMount: function() {
+  }();
+
+  state = {
+    rank: 1,
+    zenithAttackBonus: 0,
+    zenithHPBonus: 0,
+    zenithPartyHPBonus: 0,
+    masterBonus: 0,
+    masterBonusHP: 0,
+    normalBuff: 0,
+    elementBuff: 0,
+    otherBuff: 0,
+    otherBuff2: 0,
+    additionalDamageBuff: 0,
+    damageLimitBuff: 0.0,
+    ougiDamageLimitBuff: 0.0,
+    hpBuff: 0,
+    daBuff: 0,
+    taBuff: 0,
+    hp: 100,
+    remainHP: 100,
+    zenithBonus1: "無し",
+    zenithBonus2: "無し",
+    enemyElement: "wind",
+    enemyDefense: 10.0,
+    job: "none",
+    element: "fire",
+    DA: 6.5,
+    TA: 3.0,
+    ougiGageBuff: 0,
+    ougiRatio: 4.5,
+    minimumHP: 0.0,
+    chainNumber: 1,
+    personalNormalBuff: 0.0,
+    personalElementBuff: 0.0,
+    personalOtherBuff: 0.0,
+    personalOtherBuff2: 0.0,
+    personalAdditionalDamageBuff: 0.0,
+    personalDABuff: 0.0,
+    personalTABuff: 0.0,
+    personalOugiGageBuff: 0.0,
+    personalDamageLimitBuff: 0.0,
+    personalOugiDamageLimitBuff: 0.0
+  };
+
+  componentDidMount() {
     // 初期化後 state を 上の階層に渡しておく
     this.props.onChange(this.state);
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     // only fired on Data Load
     if (
       nextProps.dataName != this.props.dataName &&
@@ -64,65 +109,25 @@ var Profile = React.createClass({
       this.setState(newState);
       return 0;
     }
-  },
-  getInitialState: function() {
-    return {
-      rank: 1,
-      zenithAttackBonus: 0,
-      zenithHPBonus: 0,
-      zenithPartyHPBonus: 0,
-      masterBonus: 0,
-      masterBonusHP: 0,
-      normalBuff: 0,
-      elementBuff: 0,
-      otherBuff: 0,
-      otherBuff2: 0,
-      additionalDamageBuff: 0,
-      damageLimitBuff: 0.0,
-      ougiDamageLimitBuff: 0.0,
-      hpBuff: 0,
-      daBuff: 0,
-      taBuff: 0,
-      hp: 100,
-      remainHP: 100,
-      zenithBonus1: "無し",
-      zenithBonus2: "無し",
-      enemyElement: "wind",
-      enemyDefense: 10.0,
-      job: "none",
-      element: "fire",
-      DA: 6.5,
-      TA: 3.0,
-      ougiGageBuff: 0,
-      ougiRatio: 4.5,
-      minimumHP: 0.0,
-      chainNumber: 1,
-      personalNormalBuff: 0.0,
-      personalElementBuff: 0.0,
-      personalOtherBuff: 0.0,
-      personalOtherBuff2: 0.0,
-      personalAdditionalDamageBuff: 0.0,
-      personalDABuff: 0.0,
-      personalTABuff: 0.0,
-      personalOugiGageBuff: 0.0,
-      personalDamageLimitBuff: 0.0,
-      personalOugiDamageLimitBuff: 0.0
-    };
-  },
-  switchBufflist: function(e) {
+  }
+
+  switchBufflist = (e) => {
     this.setState({ openBufflist: !this.state.openBufflist });
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     // input タイプの入力フォームはonBlurを利用する
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  handleOnBlur: function(e) {
+  };
+
+  handleOnBlur = (e) => {
     // フォーカスが外れた時だけ変更を親に送る
     this.props.onChange(this.state);
-  },
-  handleSelectEvent: function(key, e) {
+  };
+
+  handleSelectEvent = (key, e) => {
     // select タイプの入力フォームはonChangeの際で良い
     var newState = this.state;
     newState[key] = e.target.value;
@@ -132,8 +137,9 @@ var Profile = React.createClass({
     }
     this.setState(newState);
     this.props.onChange(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -1106,6 +1112,6 @@ var Profile = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = Profile;

@@ -1,8 +1,8 @@
 var React = require("react");
 var { Thumbnail, Button } = require("react-bootstrap");
 
-var SimulatorHowTo = React.createClass({
-  render: function() {
+class SimulatorHowTo extends React.Component {
+  render() {
     return (
       <div className="howTo">
         <p>
@@ -117,6 +117,6 @@ var SimulatorHowTo = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.SimulatorHowTo = SimulatorHowTo;

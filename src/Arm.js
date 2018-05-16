@@ -7,24 +7,25 @@ var intl = require("./translate.js");
 // inject GlobalConst...
 var selector = GlobalConst.selector;
 
+var initialState = {
+  name: "",
+  attack: 0,
+  hp: 0,
+  armType: "sword",
+  skill1: "non",
+  skill2: "non",
+  slv: 1,
+  considerNumberMin: 0,
+  considerNumberMax: 1,
+  element: "fire",
+  element2: "fire"
+};
+
 // Arm is a fundamental object corresponding one arm.
-var Arm = React.createClass({
-  getInitialState: function() {
-    return {
-      name: "",
-      attack: 0,
-      hp: 0,
-      armType: "sword",
-      skill1: "non",
-      skill2: "non",
-      slv: 1,
-      considerNumberMin: 0,
-      considerNumberMax: 1,
-      element: "fire",
-      element2: "fire"
-    };
-  },
-  componentWillReceiveProps: function(nextProps) {
+class Arm extends React.Component {
+  state = initialState;
+
+  componentWillReceiveProps(nextProps) {
     // only fired on Data Load
     if (nextProps.dataName != this.props.dataName) {
       if (
@@ -67,8 +68,9 @@ var Arm = React.createClass({
       this.setState(newState);
       this.props.onChange(this.props.id, newState, false);
     }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     var state = this.state;
 
     // もし dataForLoad に自分に該当するキーがあるなら読み込む
@@ -96,8 +98,9 @@ var Arm = React.createClass({
     // 初期化後 (何も処理が行われていなくても) state を 上の階層に渡しておく
     // armList では onChange が勝手に上に渡してくれるので必要なし
     this.props.onChange(this.props.id, state, false);
-  },
-  treatAddArmFromTemplate: function(state, newarm, considerNum) {
+  }
+
+  treatAddArmFromTemplate = (state, newarm, considerNum) => {
     state["name"] = newarm.name;
 
     var attackCalcFunc = (lv, minlv, atk, minatk, plus, levelWidth) => {
@@ -300,14 +303,16 @@ var Arm = React.createClass({
     state["considerNumberMax"] = parseInt(considerNum);
 
     return state;
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     // input の時は親に送らない
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  handleSelectEvent: function(key, e) {
+  };
+
+  handleSelectEvent = (key, e) => {
     // Selectの時は親に送ってしまっていい
     var newState = this.state;
     if (key == "considerNumberMin") {
@@ -326,37 +331,44 @@ var Arm = React.createClass({
 
     this.setState(newState);
     this.props.onChange(this.props.id, newState, false);
-  },
-  handleOnBlur: function(key, e) {
+  };
+
+  handleOnBlur = (key, e) => {
     // フォーカスが外れた時だけ変更を親に送る
     if (key == "name") {
       this.props.onChange(this.props.id, this.state, true);
     } else {
       this.props.onChange(this.props.id, this.state, false);
     }
-  },
-  clickRemoveButton: function(e) {
-    var initState = this.getInitialState();
+  };
+
+  clickRemoveButton = (e) => {
+    var initState = initialState;
     initState["considerNumberMax"] = 0;
     this.props.onRemove(this.props.id, initState);
-  },
-  clickCopyButton: function(e, state) {
+  };
+
+  clickCopyButton = (e, state) => {
     this.props.onCopy(this.props.id, this.state);
-  },
-  clickMoveUp: function(e) {
+  };
+
+  clickMoveUp = (e) => {
     this.props.onMoveUp(this.props.id);
-  },
-  clickMoveDown: function(e) {
+  };
+
+  clickMoveDown = (e) => {
     this.props.onMoveDown(this.props.id);
-  },
-  openPresets: function(e) {
+  };
+
+  openPresets = (e) => {
     if (e.target.value == "" && this.state.attack == 0) {
       e.target.blur();
       this.setState({ attack: 1 });
       this.props.openPresets();
     }
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -549,6 +561,6 @@ var Arm = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.Arm = Arm;

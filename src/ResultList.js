@@ -46,8 +46,56 @@ var {
   getTypeBonusStr
 } = require("./global_logic.js");
 
-var ResultList = React.createClass({
-  calculateResult: function(newprops) {
+class ResultList extends React.Component {
+  state = {
+    switchTotalAttack: 1,
+    switchATKandHP: 0,
+    switchHP: 1,
+    switchCharaHP: 0,
+    switchDATA: 0,
+    switchExpectedAttack: 0,
+    switchSkillTotal: 0,
+    switchCharaExpectedAttack: 0,
+    switchCriticalRatio: 0,
+    switchCriticalAttack: 0,
+    switchCharaAttack: 0,
+    switchCharaDA: 0,
+    switchCharaTotalExpected: 0,
+    switchCharaCycleDamage: 0,
+    switchCharaPureDamage: 0,
+    switchCharaOugiDamage: 0,
+    switchCharaOugiGage: 0,
+    switchAverageAttack: 1,
+    switchAverageCriticalAttack: 0,
+    switchTotalExpected: 0,
+    switchAverageTotalExpected: 0,
+    switchDamage: 0,
+    switchPureDamage: 0,
+    switchDamageWithCritical: 0,
+    switchDamageWithMultiple: 0,
+    switchOugiGage: 0,
+    switchOugiDamage: 0,
+    switchCycleDamage: 0,
+    switchAverageCycleDamage: 1,
+    switchDebuffResistance: 0,
+    switchChainBurst: 0,
+    disableAutoResultUpdate: 0,
+    result: { summon: this.props.summon, result: [] },
+    chartSortKey: "totalAttack",
+    chartData: {},
+    storedList: { combinations: [], armlist: [], names: [] },
+    openHPChart: false,
+    displayRealHP: false,
+    openSimulator: false,
+    openDisplayElementTable: false,
+    openHPChartTutorial: false,
+    openShowStoredList: false,
+    ChartButtonActive: false,
+    previousArmlist: null,
+    previousCombinations: null
+  };
+
+  calculateResult = (newprops) => {
     var prof = newprops.profile;
     var arml = newprops.armlist;
     var summon = newprops.summon;
@@ -217,69 +265,25 @@ var ResultList = React.createClass({
     } else {
       return { summon: summon, result: [] };
     }
-  },
-  getInitialState: function() {
-    return {
-      switchTotalAttack: 1,
-      switchATKandHP: 0,
-      switchHP: 1,
-      switchCharaHP: 0,
-      switchDATA: 0,
-      switchExpectedAttack: 0,
-      switchSkillTotal: 0,
-      switchCharaExpectedAttack: 0,
-      switchCriticalRatio: 0,
-      switchCriticalAttack: 0,
-      switchCharaAttack: 0,
-      switchCharaDA: 0,
-      switchCharaTotalExpected: 0,
-      switchCharaCycleDamage: 0,
-      switchCharaPureDamage: 0,
-      switchCharaOugiDamage: 0,
-      switchCharaOugiGage: 0,
-      switchAverageAttack: 1,
-      switchAverageCriticalAttack: 0,
-      switchTotalExpected: 0,
-      switchAverageTotalExpected: 0,
-      switchDamage: 0,
-      switchPureDamage: 0,
-      switchDamageWithCritical: 0,
-      switchDamageWithMultiple: 0,
-      switchOugiGage: 0,
-      switchOugiDamage: 0,
-      switchCycleDamage: 0,
-      switchAverageCycleDamage: 1,
-      switchDebuffResistance: 0,
-      switchChainBurst: 0,
-      disableAutoResultUpdate: 0,
-      result: { summon: this.props.summon, result: [] },
-      chartSortKey: "totalAttack",
-      chartData: {},
-      storedList: { combinations: [], armlist: [], names: [] },
-      openHPChart: false,
-      displayRealHP: false,
-      openSimulator: false,
-      openDisplayElementTable: false,
-      openHPChartTutorial: false,
-      openShowStoredList: false,
-      ChartButtonActive: false,
-      previousArmlist: null,
-      previousCombinations: null
-    };
-  },
-  closeHPChart: function() {
+  };
+
+  closeHPChart = () => {
     this.setState({ openHPChart: false });
-  },
-  closeSimulator: function() {
+  };
+
+  closeSimulator = () => {
     this.setState({ openSimulator: false });
-  },
-  closeHPChartTutorial: function() {
+  };
+
+  closeHPChartTutorial = () => {
     this.setState({ openHPChartTutorial: false });
-  },
-  openHPChartTutorial: function() {
+  };
+
+  openHPChartTutorial = () => {
     this.setState({ openHPChartTutorial: true });
-  },
-  componentWillReceiveProps: function(nextProps) {
+  };
+
+  componentWillReceiveProps(nextProps) {
     if (
       this.state.disableAutoResultUpdate != 1 &&
       (nextProps.noResultUpdate == undefined || !nextProps.noResultUpdate)
@@ -314,8 +318,9 @@ var ResultList = React.createClass({
       });
       this.setState({ ChartButtonActive: false });
     }
-  },
-  handleEvent: function(key, e) {
+  }
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = newState[key] == 0 ? 1 : 0;
 
@@ -324,8 +329,9 @@ var ResultList = React.createClass({
       newState["result"] = this.calculateResult(this.props);
     }
     this.setState(newState);
-  },
-  openHPChart: function(e) {
+  };
+
+  openHPChart = (e) => {
     var sortkey = "averageCyclePerTurn";
     var sortkeyname = "予想ターン毎ダメージのパーティ平均値";
     if (this.props.sortKey == this.props.sortKey) {
@@ -334,8 +340,9 @@ var ResultList = React.createClass({
     }
     this.setState({ chartSortKey: sortkey });
     this.setState({ openHPChart: true });
-  },
-  addHaisuiData: function(id, summonid) {
+  };
+
+  addHaisuiData = (id, summonid) => {
     var newStored = this.state.storedList;
     var newCombinations = this.state.result.result[summonid][id].armNumbers;
     newStored["combinations"].push(JSON.parse(JSON.stringify(newCombinations)));
@@ -355,16 +362,19 @@ var ResultList = React.createClass({
 
     this.setState({ storedList: newStored });
     this.setState({ ChartButtonActive: true });
-  },
-  openSimulator: function() {
+  };
+
+  openSimulator = () => {
     this.setState({ openSimulator: true });
     this.setState({ chartSortKey: "averageExpectedDamage" });
-  },
-  switchDisplayRealHP: function(e) {
+  };
+
+  switchDisplayRealHP = (e) => {
     this.setState({ displayRealHP: !this.state.displayRealHP });
     this.openHPChart(!this.state.displayRealHP);
-  },
-  resetStoredList: function(e) {
+  };
+
+  resetStoredList = (e) => {
     this.setState({
       storedList: { combinations: [], armlist: [], names: [] },
       openShowStoredList: false,
@@ -372,14 +382,17 @@ var ResultList = React.createClass({
       openSimulator: false,
       ChartButtonActive: false
     });
-  },
-  openStoredList: function(e) {
+  };
+
+  openStoredList = (e) => {
     this.setState({ openShowStoredList: true });
-  },
-  closeStoredList: function(e) {
+  };
+
+  closeStoredList = (e) => {
     this.setState({ openShowStoredList: false });
-  },
-  removeOneStoredList: function(e) {
+  };
+
+  removeOneStoredList = (e) => {
     var targetIndex = parseInt(e.target.id);
     var newCombinations = this.state.storedList.combinations;
     newCombinations.splice(targetIndex, 1);
@@ -404,21 +417,25 @@ var ResultList = React.createClass({
         this.openSimulator();
       }
     }
-  },
-  handleStoredListNameChange: function(ind, newName) {
+  };
+
+  handleStoredListNameChange = (ind, newName) => {
     var newStoredList = this.state.storedList;
     newStoredList.names[ind] = newName;
     this.setState({ storedList: newStoredList });
-  },
-  forceResultUpdate: function() {
+  };
+
+  forceResultUpdate = () => {
     this.setState({ result: this.calculateResult(this.props) });
-  },
-  openDisplayTable: function() {
+  };
+
+  openDisplayTable = () => {
     this.setState({
       openDisplayElementTable: !this.state.openDisplayElementTable
     });
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     var res = this.state.result;
@@ -1649,6 +1666,6 @@ var ResultList = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.ResultList = ResultList;

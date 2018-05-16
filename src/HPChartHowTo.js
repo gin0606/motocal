@@ -1,8 +1,8 @@
 var React = require("react");
 var { Thumbnail, Modal } = require("react-bootstrap");
 
-var HPChartHowTo = React.createClass({
-  render: function() {
+class HPChartHowTo extends React.Component {
+  render() {
     return (
       <Modal
         className="hpChartTutotial"
@@ -74,6 +74,6 @@ var HPChartHowTo = React.createClass({
       </Modal>
     );
   }
-});
+}
 
 module.exports.HPChartHowTo = HPChartHowTo;

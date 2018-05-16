@@ -4,16 +4,15 @@ var { Button, FormControl } = require("react-bootstrap");
 var intl = require("./translate.js");
 var { githubAPItoken } = require("./secret_consts.js");
 
-var SendRequest = React.createClass({
-  getInitialState: function() {
-    return {
-      name: "",
-      message: "",
-      yourname: "",
-      sendingMessage: false
-    };
-  },
-  sendRequestToGithub: function() {
+class SendRequest extends React.Component {
+  state = {
+    name: "",
+    message: "",
+    yourname: "",
+    sendingMessage: false
+  };
+
+  sendRequestToGithub = () => {
     if (this.state.name != "") {
       this.setState({ sendingMessage: true });
       var sendData = { body: "" };
@@ -62,13 +61,15 @@ var SendRequest = React.createClass({
         alert(this.props.type + " name must not be empty.");
       }
     }
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -141,5 +142,6 @@ var SendRequest = React.createClass({
       </div>
     );
   }
-});
+}
+
 module.exports.SendRequest = SendRequest;

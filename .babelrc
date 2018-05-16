@@ -1,4 +1,7 @@
 {
   "presets": ["react", ["env", { "modules": false }]],
-  "plugins": ["transform-inline-environment-variables"]
+  "plugins": [
+    "transform-inline-environment-variables",
+    "transform-class-properties"
+  ]
 }

@@ -16,14 +16,15 @@ var { Chara } = require("./Chara.js");
 var selector = GlobalConst.selector;
 var _ua = GlobalConst._ua;
 
-var CharaList = React.createClass({
-  getInitialState: function() {
+class CharaList extends React.Component {
+  constructor(props) {
+    super(props);
     var charas = [];
-    for (var i = 0; i < this.props.charaNum; i++) {
+    for (var i = 0; i < props.charaNum; i++) {
       charas.push(i);
     }
 
-    return {
+    this.state = {
       charalist: [],
       charas: charas,
       defaultElement: "fire",
@@ -32,8 +33,9 @@ var CharaList = React.createClass({
       openPresets: false,
       arrayForCopy: {}
     };
-  },
-  updateCharaNum: function(num) {
+  }
+
+  updateCharaNum = (num) => {
     var charas = this.state.charas;
 
     if (charas.length < num) {
@@ -48,19 +50,23 @@ var CharaList = React.createClass({
       }
     }
     this.setState({ charas: charas });
-  },
-  closePresets: function() {
+  };
+
+  closePresets = () => {
     this.setState({ openPresets: false });
-  },
-  openPresets: function() {
+  };
+
+  openPresets = () => {
     this.setState({ openPresets: true });
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     if (this.props.dataForLoad != undefined) {
       this.setState({ charalist: this.props.dataForLoad });
     }
-  },
-  componentWillReceiveProps: function(nextProps) {
+  }
+
+  componentWillReceiveProps(nextProps) {
     if (nextProps.dataName != this.props.dataName) {
       this.setState({ charalist: nextProps.dataForLoad });
       this.updateCharaNum(nextProps.charaNum);
@@ -75,21 +81,24 @@ var CharaList = React.createClass({
       this.setState({ charalist: newcharalist });
     }
     this.updateCharaNum(nextProps.charaNum);
-  },
-  handleOnChange: function(key, state, isSubtle) {
+  }
+
+  handleOnChange = (key, state, isSubtle) => {
     var newcharalist = this.state.charalist;
     newcharalist[key] = state;
     this.setState({ charalist: newcharalist });
     this.setState({ addChara: null });
     this.props.onChange(newcharalist, isSubtle);
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     newState["addChara"] = null;
     this.setState(newState);
-  },
-  handleOnRemove: function(id, initialState) {
+  };
+
+  handleOnRemove = (id, initialState) => {
     // arrayForCopy に initial state を入れておいて、
     // componentWillReceivePropsで読み出されるようにする
     var newArrayForCopy = this.state.arrayForCopy;
@@ -102,13 +111,15 @@ var CharaList = React.createClass({
 
     // Root へ変化を伝搬
     this.props.onChange(newcharalist, false);
-  },
-  copyCompleted: function(id) {
+  };
+
+  copyCompleted = (id) => {
     var state = this.state;
     delete state["arrayForCopy"][id];
     this.setState(state);
-  },
-  handleMoveUp: function(id) {
+  };
+
+  handleMoveUp = (id) => {
     if (id > 0) {
       var newcharas = this.state.charas;
 
@@ -123,8 +134,9 @@ var CharaList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newcharalist, false);
     }
-  },
-  handleMoveDown: function(id) {
+  };
+
+  handleMoveDown = (id) => {
     if (id < this.props.charaNum - 1) {
       var newcharas = this.state.charas;
 
@@ -139,8 +151,9 @@ var CharaList = React.createClass({
       // Root へ変化を伝搬
       this.props.onChange(newcharalist, false);
     }
-  },
-  addTemplateChara: function(templateChara) {
+  };
+
+  addTemplateChara = (templateChara) => {
     var minimumID = -1;
     for (var key in this.state.charalist) {
       if (this.state.charalist[key].name == "") {
@@ -167,8 +180,9 @@ var CharaList = React.createClass({
         alert(intl.translate("キャラがいっぱい", this.props.locale));
       }
     }
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var charas = this.state.charas;
     var charalist = this.state.charalist;
@@ -260,6 +274,6 @@ var CharaList = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.CharaList = CharaList;

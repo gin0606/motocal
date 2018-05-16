@@ -8,17 +8,16 @@ var selector = GlobalConst.selector;
 var { SendRequest } = require("./SendRequest.js");
 var intl = require("./translate.js");
 
-var RegisteredChara = React.createClass({
-  getInitialState: function() {
-    return {
-      filterText: "",
-      filterElement: "all",
-      charaData: {},
-      limit: 50,
-      openSendRequest: false
-    };
-  },
-  componentDidMount: function() {
+class RegisteredChara extends React.Component {
+  state = {
+    filterText: "",
+    filterElement: "all",
+    charaData: {},
+    limit: 50,
+    openSendRequest: false
+  };
+
+  componentDidMount() {
     $.ajax({
       url: "./charaData.json",
       dataType: "json",
@@ -39,22 +38,27 @@ var RegisteredChara = React.createClass({
         console.log("error: ", err);
       }.bind(this)
     });
-  },
-  clickedTemplate: function(e) {
+  }
+
+  clickedTemplate = (e) => {
     this.props.onClick(this.state.charaData[e.target.getAttribute("id")]);
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  openSendRequest: function(e) {
+  };
+
+  openSendRequest = (e) => {
     this.setState({ openSendRequest: true });
-  },
-  closeSendRequest: function(e) {
+  };
+
+  closeSendRequest = (e) => {
     this.setState({ openSendRequest: false });
-  },
-  render: function() {
+  };
+
+  render() {
     var clickedTemplate = this.clickedTemplate;
     var filterText = this.state.filterText;
     var filterElement = this.state.filterElement;
@@ -194,6 +198,6 @@ var RegisteredChara = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.RegisteredChara = RegisteredChara;

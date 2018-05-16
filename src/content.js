@@ -67,12 +67,13 @@ function getVarInQuery(key) {
 }
 
 // Root class contains [Profile, ArmList, Results].
-var Root = React.createClass({
-  getInitialState: function() {
+class Root extends React.Component {
+  constructor(props) {
+    super(props);
     var initial_width = 25;
     var initial_height = 100;
 
-    return {
+    this.state = {
       armNum: 6,
       summonNum: 2,
       charaNum: 4,
@@ -97,26 +98,33 @@ var Root = React.createClass({
       locale: intl.getLocale(),
       dataForLoad: {}
     };
-  },
-  openHowTo: function(e) {
+  }
+
+  openHowTo = (e) => {
     this.setState({ openHowTo: true });
-  },
-  closeHowTo: function(e) {
+  };
+
+  closeHowTo = (e) => {
     this.setState({ openHowTo: false });
-  },
-  openNiteHowTo: function(e) {
+  };
+
+  openNiteHowTo = (e) => {
     this.setState({ openNiteHowTo: true });
-  },
-  closeNiteHowTo: function(e) {
+  };
+
+  closeNiteHowTo = (e) => {
     this.setState({ openNiteHowTo: false });
-  },
-  openSimulatorHowTo: function(e) {
+  };
+
+  openSimulatorHowTo = (e) => {
     this.setState({ openSimulatorHowTo: true });
-  },
-  closeSimulatorHowTo: function(e) {
+  };
+
+  closeSimulatorHowTo = (e) => {
     this.setState({ openSimulatorHowTo: false });
-  },
-  getDatacharById: function(id) {
+  };
+
+  getDatacharById = (id) => {
     $.ajax({
       url: "getdata.php",
       type: "POST",
@@ -157,23 +165,27 @@ var Root = React.createClass({
         );
       }.bind(this)
     });
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     if (urlid != "") {
       this.getDatacharById(urlid);
     }
     this.setState({ noResultUpdate: false });
-  },
-  componentDidUpdate: function() {
+  }
+
+  componentDidUpdate() {
     window.dispatchEvent(new Event("resize"));
-  },
-  handleEvent: function(key, e) {
+  }
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     if (key == "sortKey") newState.noResultUpdate = false;
     this.setState(newState);
-  },
-  onChangeArmData: function(state, isSubtle) {
+  };
+
+  onChangeArmData = (state, isSubtle) => {
     // armlistの武器名に変更があればresultはupdateしなくてよい
     this.setState({ armlist: state });
 
@@ -183,16 +195,19 @@ var Root = React.createClass({
     } else {
       this.setState({ noResultUpdate: false });
     }
-  },
-  onChangeProfileData: function(state) {
+  };
+
+  onChangeProfileData = (state) => {
     this.setState({ profile: state });
     this.setState({ noResultUpdate: false });
-  },
-  onChangeSummonData: function(state) {
+  };
+
+  onChangeSummonData = (state) => {
     this.setState({ summon: state });
     this.setState({ noResultUpdate: false });
-  },
-  onChangeCharaData: function(state, isSubtle) {
+  };
+
+  onChangeCharaData = (state, isSubtle) => {
     this.setState({ chara: state });
 
     if (isSubtle != undefined) {
@@ -200,12 +215,14 @@ var Root = React.createClass({
     } else {
       this.setState({ noResultUpdate: false });
     }
-  },
-  onChangeSimulationData: function(state) {
+  };
+
+  onChangeSimulationData = (state) => {
     this.setState({ simulator: state });
     this.setState({ noResultUpdate: true });
-  },
-  handleChangeData: function(newDataName, newData) {
+  };
+
+  handleChangeData = (newDataName, newData) => {
     // Rootが持つデータを更新
     this.setState({ armNum: newData.armNum });
     this.setState({ summonNum: newData.summonNum });
@@ -229,13 +246,15 @@ var Root = React.createClass({
 
     this.setState({ dataName: newDataName });
     this.setState({ noResultUpdate: false });
-  },
-  changeLang: function(key, e) {
+  };
+
+  changeLang = (key, e) => {
     if (key != "ja" && key != "en") key = "ja";
 
     this.setState({ locale: key });
-  },
-  handleChangeTab: function(eventKey) {
+  };
+
+  handleChangeTab = (eventKey) => {
     var activeKey =
       this.state.activeKey == undefined ? "inputTab" : this.state.activeKey;
     document
@@ -246,8 +265,9 @@ var Root = React.createClass({
     target.setAttribute("class", "Tab");
     this.setState({ activeKey: eventKey });
     this.setState({ noResultUpdate: true });
-  },
-  addArmNum: function(e) {
+  };
+
+  addArmNum = (e) => {
     var newArmNum = parseInt(this.state.armNum);
     if (newArmNum < 20) {
       newArmNum += 1;
@@ -256,23 +276,27 @@ var Root = React.createClass({
     } else {
       return -1;
     }
-  },
-  subArmNum: function(e) {
+  };
+
+  subArmNum = (e) => {
     var newArmNum = parseInt(this.state.armNum);
     if (newArmNum > 1) newArmNum -= 1;
     this.setState({ armNum: newArmNum });
-  },
-  addSummonNum: function(e) {
+  };
+
+  addSummonNum = (e) => {
     var newSummonNum = parseInt(this.state.summonNum);
     if (newSummonNum < 6) newSummonNum += 1;
     this.setState({ summonNum: newSummonNum });
-  },
-  subSummonNum: function(e) {
+  };
+
+  subSummonNum = (e) => {
     var newSummonNum = parseInt(this.state.summonNum);
     if (newSummonNum > 1) newSummonNum -= 1;
     this.setState({ summonNum: newSummonNum });
-  },
-  addCharaNum: function(e) {
+  };
+
+  addCharaNum = (e) => {
     var newCharaNum = parseInt(this.state.charaNum);
     if (newCharaNum < 10) {
       newCharaNum += 1;
@@ -281,13 +305,15 @@ var Root = React.createClass({
     } else {
       return -1;
     }
-  },
-  subCharaNum: function(e) {
+  };
+
+  subCharaNum = (e) => {
     var newCharaNum = parseInt(this.state.charaNum);
     if (newCharaNum > 1) newCharaNum -= 1;
     this.setState({ charaNum: newCharaNum });
-  },
-  onDragEnd: function(e) {
+  };
+
+  onDragEnd = (e) => {
     if (e.pageX > 0) {
       this.setState({
         rootleftWidth: parseInt(100.0 * e.pageX / window.innerWidth)
@@ -297,8 +323,9 @@ var Root = React.createClass({
       });
       this.setState({ noResultUpdate: true });
     }
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.state.locale;
     if (_ua.Mobile || _ua.Tablet) {
       return (
@@ -741,36 +768,38 @@ var Root = React.createClass({
       );
     }
   }
-});
+}
 
-var Sys = React.createClass({
-  getInitialState: function() {
-    return {
-      storedData: {},
-      dataName: "",
-      selectedData: "",
-      uploadedData: ""
-    };
-  },
-  componentDidMount: function() {
+class Sys extends React.Component {
+  state = {
+    storedData: {},
+    dataName: "",
+    selectedData: "",
+    uploadedData: ""
+  };
+
+  componentDidMount() {
     // localStorage から data をロードする
     if ("data" in localStorage && localStorage.data != "{}") {
       var storedData = JSON.parse(Base64.decode(localStorage["data"]));
       this.setState({ storedData: storedData });
       this.setState({ selectedData: Object.keys(storedData)[0] });
     }
-  },
-  handleOnClick: function(key, e) {
+  }
+
+  handleOnClick = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  onSubmitRemove: function(e) {
+  };
+
+  onSubmitRemove = (e) => {
     if (this.state.selectedData != "") {
       // remove data
       var newState = this.state;
@@ -785,8 +814,9 @@ var Sys = React.createClass({
     } else {
       alert("削除するデータを選択して下さい。");
     }
-  },
-  onSubmitLoad: function(e) {
+  };
+
+  onSubmitLoad = (e) => {
     e.preventDefault();
     if (this.state.selectedData != "") {
       var dataForLoad = JSON.parse(
@@ -799,8 +829,9 @@ var Sys = React.createClass({
     } else {
       alert("読み込むデータを選択して下さい。");
     }
-  },
-  onSubmitSave: function(e) {
+  };
+
+  onSubmitSave = (e) => {
     e.preventDefault();
     if (this.state.dataName != "") {
       var newState = this.state;
@@ -820,8 +851,9 @@ var Sys = React.createClass({
     } else {
       alert("データ名を入力して下さい。");
     }
-  },
-  onSubmitDownload: function(e) {
+  };
+
+  onSubmitDownload = (e) => {
     e.preventDefault();
     if (this.state.dataName != "") {
       var newState = this.state;
@@ -849,11 +881,13 @@ var Sys = React.createClass({
     } else {
       alert("データ名を入力して下さい。");
     }
-  },
-  onSubmitUpload: function(e) {
+  };
+
+  onSubmitUpload = (e) => {
     console.log("データアップロードテスト");
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var datalist = [];
     if (Object.keys(this.state.storedData).length != 0) {
@@ -924,24 +958,24 @@ var Sys = React.createClass({
       </div>
     );
   }
-});
+}
 
 // Twitter Button
-var TwitterShareButton = React.createClass({
-  componentDidMount: function() {
+class TwitterShareButton extends React.Component {
+  state = {
+    shareurl: "",
+    shareurl_history: {}
+  };
+
+  componentDidMount() {
     // localStorage から sharehistory をロードする
     if ("sharehist" in localStorage && localStorage.sharehist != "{}") {
       var sharehist = JSON.parse(localStorage["sharehist"]);
       this.setState({ shareurl_history: sharehist });
     }
-  },
-  getInitialState: function() {
-    return {
-      shareurl: "",
-      shareurl_history: {}
-    };
-  },
-  getShortenUrl: function() {
+  }
+
+  getShortenUrl = () => {
     var data = JSON.parse(JSON.stringify(this.props.data));
     if (this.props.dataName != "") {
       // 基本的にSys.dataNameに入力されているものをベースにして保存
@@ -978,8 +1012,9 @@ var TwitterShareButton = React.createClass({
         );
       }.bind(this)
     });
-  },
-  render: function() {
+  };
+
+  render() {
     var sharehist = this.state.shareurl_history;
     return (
       <div className="tweet">
@@ -1002,6 +1037,6 @@ var TwitterShareButton = React.createClass({
       </div>
     );
   }
-});
+}
 
 ReactDOM.render(<Root />, document.getElementById("app"));

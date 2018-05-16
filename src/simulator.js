@@ -531,8 +531,67 @@ var {
   initializeTotals
 } = require("./global_logic.js");
 
-var Simulator = React.createClass({
-  makeTurnBuff: function() {
+class Simulator extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    var initState = {};
+
+    // 毎回 Mount されるので
+    // データロードはinitial state設定で行う
+    // 初回は {} が降ってくるのでその場合は普通に初期化
+    if (
+      typeof props.dataForLoad === "undefined" ||
+      !("maxTurn" in props.dataForLoad)
+    ) {
+      var maxTurn = 6;
+      // 合計後のデータを入れる連想配列
+      var buffs = {};
+      // 各選択メニューに対応する連想配列
+      var bufflists = {};
+      buffs["全体バフ"] = {};
+      buffs["Djeeta"] = {};
+      bufflists["全体バフ"] = {};
+      bufflists["Djeeta"] = {};
+
+      for (var i = 0; i < props.chara.length; i++) {
+        if (props.chara[i].name !== "") {
+          buffs[props.chara[i].name] = {};
+          bufflists[props.chara[i].name] = {};
+        }
+      }
+
+      for (var i = 0; i < maxTurn; i++) {
+        for (var key in buffs) {
+          buffs[key][i] = {
+            normal: 0,
+            element: 0,
+            other: 0,
+            DA: 0,
+            TA: 0,
+            ougiGage: 0,
+            additionalDamage: 0,
+            turnType: "normal",
+            remainHP: 100
+          };
+          bufflists[key][i] = [];
+        }
+      }
+
+      initState["buffs"] = buffs;
+      initState["bufflists"] = bufflists;
+      initState["maxTurn"] = maxTurn;
+      initState["openPersonalBuff"] = false;
+      initState["nowDragging"] = false;
+    } else {
+      // 上から降ってきたデータはは
+      // 現在の形に合わせる処理が必要になる
+      initState = this.updateBuffList(props.dataForLoad);
+    }
+
+    this.state = initState;
+  }
+
+  makeTurnBuff = () => {
     var storedCombinations = this.props.storedList.combinations;
     var storedArmlist = this.props.storedList.armlist;
     var storedNames = this.props.storedList.names;
@@ -619,13 +678,15 @@ var Simulator = React.createClass({
       storedNames,
       this.props.locale
     );
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     // Mount し終わった際のデータを
     // Root.state.simulatorに保存する
     this.props.onChange(this.state);
-  },
-  updateBuffList: function(oldState) {
+  }
+
+  updateBuffList = (oldState) => {
     var newState = {
       buffs: {},
       bufflists: {},
@@ -678,65 +739,9 @@ var Simulator = React.createClass({
       }
     }
     return newState;
-  },
-  getInitialState: function() {
-    var initState = {};
+  };
 
-    // 毎回 Mount されるので
-    // データロードはinitial state設定で行う
-    // 初回は {} が降ってくるのでその場合は普通に初期化
-    if (
-      typeof this.props.dataForLoad === "undefined" ||
-      !("maxTurn" in this.props.dataForLoad)
-    ) {
-      var maxTurn = 6;
-      // 合計後のデータを入れる連想配列
-      var buffs = {};
-      // 各選択メニューに対応する連想配列
-      var bufflists = {};
-      buffs["全体バフ"] = {};
-      buffs["Djeeta"] = {};
-      bufflists["全体バフ"] = {};
-      bufflists["Djeeta"] = {};
-
-      for (var i = 0; i < this.props.chara.length; i++) {
-        if (this.props.chara[i].name !== "") {
-          buffs[this.props.chara[i].name] = {};
-          bufflists[this.props.chara[i].name] = {};
-        }
-      }
-
-      for (var i = 0; i < maxTurn; i++) {
-        for (var key in buffs) {
-          buffs[key][i] = {
-            normal: 0,
-            element: 0,
-            other: 0,
-            DA: 0,
-            TA: 0,
-            ougiGage: 0,
-            additionalDamage: 0,
-            turnType: "normal",
-            remainHP: 100
-          };
-          bufflists[key][i] = [];
-        }
-      }
-
-      initState["buffs"] = buffs;
-      initState["bufflists"] = bufflists;
-      initState["maxTurn"] = maxTurn;
-      initState["openPersonalBuff"] = false;
-      initState["nowDragging"] = false;
-    } else {
-      // 上から降ってきたデータはは
-      // 現在の形に合わせる処理が必要になる
-      initState = this.updateBuffList(this.props.dataForLoad);
-    }
-
-    return initState;
-  },
-  updateBuffAmount: function(newState, name, ind) {
+  updateBuffAmount = (newState, name, ind) => {
     // 更新されたターンのところだけアップデートすればよい
     newState.buffs[name][ind].normal = 0;
     newState.buffs[name][ind].element = 0;
@@ -753,8 +758,9 @@ var Simulator = React.createClass({
 
     this.setState(newState);
     this.props.onChange(newState);
-  },
-  updateBuffAmountAllTurn: function(newState, name) {
+  };
+
+  updateBuffAmountAllTurn = (newState, name) => {
     for (var j = 0; j < this.state.maxTurn; j++) {
       newState.buffs[name][j].normal = 0;
       newState.buffs[name][j].element = 0;
@@ -772,8 +778,9 @@ var Simulator = React.createClass({
 
     this.setState(newState);
     this.props.onChange(newState);
-  },
-  handleSelectEvent: function(key, e) {
+  };
+
+  handleSelectEvent = (key, e) => {
     // select タイプの入力フォームはonChangeの際で良い
     var newState = this.state;
     if (key == "maxTurn") {
@@ -816,8 +823,9 @@ var Simulator = React.createClass({
     newState[key] = parseInt(e.target.value);
     this.setState(newState);
     this.props.onChange(newState);
-  },
-  isDisplay: function(key) {
+  };
+
+  isDisplay = (key) => {
     if (key == "全体バフ") {
       return true;
     } else if (!this.state.openPersonalBuff) {
@@ -831,36 +839,41 @@ var Simulator = React.createClass({
         }
       }
     }
-  },
-  handleChangeBuff: function(e) {
+  };
+
+  handleChangeBuff = (e) => {
     var newState = this.state;
     var id = e.target.getAttribute("id").split("_");
     var name = e.target.getAttribute("name");
     newState.bufflists[name][id[0]][id[1]] = e.target.value;
     this.updateBuffAmount(newState, name, id[0]);
-  },
-  handleRemainHPChange: function(e) {
+  };
+
+  handleRemainHPChange = (e) => {
     var newState = this.state;
     var name = e.target.getAttribute("name");
     var id = e.target.getAttribute("id");
     newState.buffs[name][id]["remainHP"] = parseInt(e.target.value);
     this.updateBuffAmount(newState, name, id);
-  },
-  handleTurnTypeChange: function(e) {
+  };
+
+  handleTurnTypeChange = (e) => {
     var newState = this.state;
     var name = e.target.getAttribute("name");
     var id = e.target.getAttribute("id");
     newState.buffs[name][id]["turnType"] = e.target.value;
     this.updateBuffAmount(newState, name, id);
-  },
-  addBuffNum: function(e) {
+  };
+
+  addBuffNum = (e) => {
     var newbuff = this.state.bufflists;
     var key = e.target.getAttribute("name");
     var turn = e.target.getAttribute("id");
     newbuff[key][turn].push("normal_0");
     this.setState({ bufflists: newbuff });
-  },
-  subBuffNum: function(e) {
+  };
+
+  subBuffNum = (e) => {
     var newState = this.state;
     var key = e.target.getAttribute("name");
     var turn = e.target.getAttribute("id");
@@ -868,8 +881,9 @@ var Simulator = React.createClass({
       newState.bufflists[key][turn].pop();
       this.updateBuffAmount(newState, key, turn);
     }
-  },
-  copyBuffTo: function(e, direction) {
+  };
+
+  copyBuffTo = (e, direction) => {
     var newState = this.state;
     var keys = Object.keys(newState.bufflists);
     var name = e.target.getAttribute("name");
@@ -908,14 +922,17 @@ var Simulator = React.createClass({
         }
       }
     }
-  },
-  copyBuffToUP: function(e) {
+  };
+
+  copyBuffToUP = (e) => {
     this.copyBuffTo(e, "up");
-  },
-  copyBuffToDown: function(e) {
+  };
+
+  copyBuffToDown = (e) => {
     this.copyBuffTo(e, "down");
-  },
-  copyTo: function(e, direction) {
+  };
+
+  copyTo = (e, direction) => {
     var newState = this.state;
     var name = e.target.getAttribute("name");
     var id = parseInt(e.target.getAttribute("id"));
@@ -942,22 +959,27 @@ var Simulator = React.createClass({
         this.props.onChange(newState);
       }
     }
-  },
-  copyToLeft: function(e) {
+  };
+
+  copyToLeft = (e) => {
     this.copyTo(e, "left");
-  },
-  copyToRight: function(e) {
+  };
+
+  copyToRight = (e) => {
     this.copyTo(e, "right");
-  },
-  onDragStart: function(e) {
+  };
+
+  onDragStart = (e) => {
     this.setState({ nowDragging: true });
     e.dataTransfer.setData("buffDrag", e.target.id);
-  },
-  onDragEnd: function(e) {
+  };
+
+  onDragEnd = (e) => {
     e.preventDefault();
     this.setState({ nowDragging: false });
-  },
-  onDropBuff: function(e) {
+  };
+
+  onDropBuff = (e) => {
     e.preventDefault();
 
     try {
@@ -990,14 +1012,17 @@ var Simulator = React.createClass({
 
     this.setState(state);
     this.updateBuffAmountAllTurn(state, key);
-  },
-  callPreventDefault: function(e) {
+  };
+
+  callPreventDefault = (e) => {
     e.preventDefault();
-  },
-  switchPersolalBuff: function(e) {
+  };
+
+  switchPersolalBuff = (e) => {
     this.setState({ openPersonalBuff: !this.state.openPersonalBuff });
-  },
-  render: function() {
+  };
+
+  render() {
     var Turns = [];
     for (var i = 0; i < this.state.maxTurn; i++) {
       Turns.push(i + 1);
@@ -1283,6 +1308,6 @@ var Simulator = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = Simulator;

@@ -17,38 +17,41 @@ var skilltypes = GlobalConst.skilltypes;
 var { SendRequest } = require("./SendRequest.js");
 var intl = require("./translate.js");
 
-var RegisteredArm = React.createClass({
-  getInitialState: function() {
-    return {
-      filterText: "",
-      filterElement: "all",
-      armData: {},
-      limit: _ua.Mobile ? 50 : 200,
-      tempArm: {},
-      openConsiderNumberModal: false,
-      plusNum: 0,
-      armLv: 1,
-      armSLv: 1,
-      additionalNotation: "",
-      additionalSelectKeys: [],
-      additionalSelectSelectors: [],
-      additionalSelectClass: "hidden",
-      openSendRequest: false
-    };
-  },
-  openSendRequest: function(e) {
+class RegisteredArm extends React.Component {
+  state = {
+    filterText: "",
+    filterElement: "all",
+    armData: {},
+    limit: _ua.Mobile ? 50 : 200,
+    tempArm: {},
+    openConsiderNumberModal: false,
+    plusNum: 0,
+    armLv: 1,
+    armSLv: 1,
+    additionalNotation: "",
+    additionalSelectKeys: [],
+    additionalSelectSelectors: [],
+    additionalSelectClass: "hidden",
+    openSendRequest: false
+  };
+
+  openSendRequest = (e) => {
     this.setState({ openSendRequest: true });
-  },
-  closeSendRequest: function(e) {
+  };
+
+  closeSendRequest = (e) => {
     this.setState({ openSendRequest: false });
-  },
-  closeConsiderNumberModal: function() {
+  };
+
+  closeConsiderNumberModal = () => {
     this.setState({ openConsiderNumberModal: false });
-  },
-  openConsiderNumberModal: function() {
+  };
+
+  openConsiderNumberModal = () => {
     this.setState({ openConsiderNumberModal: true });
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     $.ajax({
       url: "./armData.json",
       dataType: "json",
@@ -66,8 +69,9 @@ var RegisteredArm = React.createClass({
         );
       }.bind(this)
     });
-  },
-  clickedTemplate: function(e) {
+  }
+
+  clickedTemplate = (e) => {
     var newState = this.state;
     newState["tempArm"] = this.state.armData[e.target.getAttribute("id")];
 
@@ -117,8 +121,9 @@ var RegisteredArm = React.createClass({
 
     newState["openConsiderNumberModal"] = true;
     this.setState(newState);
-  },
-  clickedConsiderNumber: function(e) {
+  };
+
+  clickedConsiderNumber = (e) => {
     var arm = JSON.parse(JSON.stringify(this.state.tempArm));
     arm["name"] = arm[this.props.locale];
     arm["plus"] = this.state.plusNum;
@@ -152,13 +157,15 @@ var RegisteredArm = React.createClass({
     this.props.onClick(arm, e.target.value);
     this.setState({ openConsiderNumberModal: false });
     this.setState({ plusNum: 0 });
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var clickedTemplate = this.clickedTemplate;
     var filterText = this.state.filterText;
@@ -665,6 +672,6 @@ var RegisteredArm = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.RegisteredArm = RegisteredArm;

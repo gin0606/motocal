@@ -8,17 +8,19 @@ var supportedSimulationChartSortkeys =
   GlobalConst.supportedSimulationChartSortkeys;
 var _ua = GlobalConst._ua;
 
-var SimulationChart = React.createClass({
-  getInitialState: function() {
-    var sortKey = this.props.sortKey;
+class SimulationChart extends React.Component {
+  constructor(props) {
+    super(props);
+    var sortKey = props.sortKey;
     if (!(sortKey in supportedSimulationChartSortkeys))
       sortKey = "summedAverageExpectedDamage";
 
-    return {
+    this.state = {
       sortKey: sortKey
     };
-  },
-  makeChartOption: function(sortKey) {
+  }
+
+  makeChartOption = (sortKey) => {
     var locale = this.props.locale;
 
     var options = {};
@@ -59,13 +61,15 @@ var SimulationChart = React.createClass({
     }
 
     return options;
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var options = this.state.options;
     var data = this.props.data;
     var sortKey = this.state.sortKey;
@@ -138,6 +142,6 @@ var SimulationChart = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.SimulationChart = SimulationChart;

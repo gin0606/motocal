@@ -3,8 +3,8 @@ var { Button, ButtonGroup } = require("react-bootstrap");
 
 var intl = require("./translate.js");
 
-var ControlAutoUpdate = React.createClass({
-  render: function() {
+class ControlAutoUpdate extends React.Component {
+  render() {
     var locale = this.props.locale;
     var gstyle = this.props.mobile ? { width: "100%" } : {};
     var style = this.props.mobile ? { width: "50%" } : {};
@@ -49,6 +49,6 @@ var ControlAutoUpdate = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.ControlAutoUpdate = ControlAutoUpdate;

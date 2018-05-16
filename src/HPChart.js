@@ -15,8 +15,19 @@ var {
   initializeTotals
 } = require("./global_logic.js");
 
-var HPChart = React.createClass({
-  makeChartData: function(props) {
+class HPChart extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    var sortKey = props.sortKey;
+    if (!(sortKey in supportedChartSortkeys)) sortKey = "averageCyclePerTurn";
+
+    this.state = {
+      sortKey: sortKey,
+      chartData: this.makeChartData(props)
+    };
+  }
+
+  makeChartData = (props) => {
     var storedCombinations = props.storedList.combinations;
     var storedArmlist = props.storedList.armlist;
     var storedNames = props.storedList.names;
@@ -61,21 +72,14 @@ var HPChart = React.createClass({
       props.displayRealHP,
       props.locale
     );
-  },
-  componentWillReceiveProps: function(nextProps) {
+  };
+
+  componentWillReceiveProps(nextProps) {
     // チャートを開きながらStoredListの名前を変更した時などに呼ばれる
     this.setState({ chartData: this.makeChartData(nextProps) });
-  },
-  getInitialState: function() {
-    var sortKey = this.props.sortKey;
-    if (!(sortKey in supportedChartSortkeys)) sortKey = "averageCyclePerTurn";
+  }
 
-    return {
-      sortKey: sortKey,
-      chartData: this.makeChartData(this.props)
-    };
-  },
-  makeChartOption: function(sortKey) {
+  makeChartOption = (sortKey) => {
     var locale = this.props.locale;
     var hlabel = this.props.displayRealHP
       ? intl.translate("残りHP", locale)
@@ -116,13 +120,15 @@ var HPChart = React.createClass({
     }
 
     return options;
-  },
-  handleEvent: function(key, e) {
+  };
+
+  handleEvent = (key, e) => {
     var newState = this.state;
     newState[key] = e.target.value;
     this.setState(newState);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var sortKey = this.state.sortKey;
     var data = this.state.chartData;
@@ -194,6 +200,6 @@ var HPChart = React.createClass({
       );
     }
   }
-});
+}
 
 module.exports.HPChart = HPChart;

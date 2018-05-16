@@ -231,8 +231,8 @@ var select_additionalbuffAmount = {
   })
 };
 
-var BuffListForm = React.createClass({
-  render: function() {
+class BuffListForm extends React.Component {
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -257,6 +257,6 @@ var BuffListForm = React.createClass({
       </FormControl>
     );
   }
-});
+}
 
 module.exports.BuffListForm = BuffListForm;

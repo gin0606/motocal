@@ -2,8 +2,12 @@ var React = require("react");
 var { Tooltip, OverlayTrigger } = require("react-bootstrap");
 var intl = require("./translate.js");
 
-module.exports.ElementColorLabel = React.createClass({
-  render: function() {
+module.exports.ElementColorLabel = class extends React.Component {
+  static propTypes = {
+    element: React.PropTypes.string.isRequired
+  };
+
+  render() {
     var element = this.props.element;
 
     if (element == "fire")
@@ -53,8 +57,5 @@ module.exports.ElementColorLabel = React.createClass({
         {this.props.children}
       </span>
     );
-  },
-  propTypes: {
-    element: React.PropTypes.string.isRequired
   }
-});
+};

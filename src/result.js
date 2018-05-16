@@ -6,11 +6,12 @@ var GlobalConst = require("./global_const.js");
 
 var { getTypeBonus, calcCriticalDeviation } = require("./global_logic.js");
 
-var Result = React.createClass({
-  onClick: function(e) {
+class Result extends React.Component {
+  onClick = (e) => {
     this.props.onAddToHaisuiData(e.target.id, this.props.summonid);
-  },
-  render: function() {
+  };
+
+  render() {
     var sw = this.props.switcher;
     var arm = this.props.arm;
     var prof = this.props.prof;
@@ -558,6 +559,6 @@ var Result = React.createClass({
       </tbody>
     );
   }
-});
+}
 
 module.exports.Result = Result;

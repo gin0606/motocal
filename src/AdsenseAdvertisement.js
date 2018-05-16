@@ -1,7 +1,7 @@
 var React = require("react");
 
-var AdsenseAdvertisement = React.createClass({
-  render: function() {
+class AdsenseAdvertisement extends React.Component {
+  render() {
     return (
       <div
         ref={"adsense-space-" + this.props.type}
@@ -9,6 +9,6 @@ var AdsenseAdvertisement = React.createClass({
       />
     );
   }
-});
+}
 
 module.exports.AdsenseAdvertisement = AdsenseAdvertisement;

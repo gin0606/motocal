@@ -4,13 +4,14 @@ var intl = require("./translate.js");
 
 var { TextWithTooltip } = require("./TextWithTooltip.js");
 
-var StoredListEditor = React.createClass({
-  handleNameChange: function(e) {
+class StoredListEditor extends React.Component {
+  handleNameChange = (e) => {
     var newName = e.target.value;
     var ind = e.target.getAttribute("name");
     this.props.handleStoredListNameChange(ind, newName);
-  },
-  render: function() {
+  };
+
+  render() {
     var locale = this.props.locale;
     var combinations = this.props.storedList.combinations;
     var armlist = this.props.storedList.armlist;
@@ -101,6 +102,6 @@ var StoredListEditor = React.createClass({
       </Modal>
     );
   }
-});
+}
 
 module.exports.StoredListEditor = StoredListEditor;

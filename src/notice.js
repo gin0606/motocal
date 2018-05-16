@@ -2,8 +2,8 @@ var React = require("react");
 var { Image, Panel, Glyphicon } = require("react-bootstrap");
 var intl = require("./translate.js");
 
-var Notice = React.createClass({
-  render: function() {
+class Notice extends React.Component {
+  render() {
     var locale = this.props.locale;
 
     return (
@@ -1501,6 +1501,6 @@ var Notice = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports = Notice;

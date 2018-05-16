@@ -1,8 +1,8 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
 
-var ColP = React.createClass({
-  propTypes: {
+class ColP extends React.Component {
+  static propTypes = {
     lg: React.PropTypes.number,
     slg: React.PropTypes.number,
     md: React.PropTypes.number,
@@ -11,36 +11,39 @@ var ColP = React.createClass({
     ssm: React.PropTypes.number,
     xs: React.PropTypes.number,
     sxs: React.PropTypes.number
-  },
-  getInitialState: function() {
-    return {
-      width: 0
-    };
-  },
-  updateWidth: function() {
+  };
+
+  static defaultProps = {
+    sxs: 12
+  };
+
+  state = {
+    width: 0
+  };
+
+  updateWidth = () => {
     var width = 0;
     var myDiv = ReactDOM.findDOMNode(this.refs.colp);
     if (myDiv != null) width = myDiv.parentNode.getBoundingClientRect().width;
     if (width != 0) {
       this.setState({ width: width });
     }
-  },
-  componentDidMount: function() {
+  };
+
+  componentDidMount() {
     window.addEventListener("resize", this.handleResize);
     this.updateWidth();
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
-  },
-  handleResize: function(e) {
+  }
+
+  handleResize = (e) => {
     this.updateWidth();
-  },
-  getDefaultProps: function() {
-    return {
-      sxs: 12
-    };
-  },
-  render: function() {
+  };
+
+  render() {
     var size = 12; // default
     var width = this.state.width;
     var values = {
@@ -105,6 +108,6 @@ var ColP = React.createClass({
       </div>
     );
   }
-});
+}
 
 module.exports.ColP = ColP;
